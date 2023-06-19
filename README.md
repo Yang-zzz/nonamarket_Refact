@@ -344,9 +344,9 @@
 - 프로젝트 시작할 당시에는 모든 것이 낯설었던 것 같습니다. 리액트를 공부한 이후로 만들게된 첫 협업 프로젝트이기도 했고 깃에 대한 경험도 부족했기 때문에 이런 저런 생각이나 걱정도 많았습니다. 하지만 걱정했던 것과는 달리 직접 부딪혀보니 어느순간 개발에 재미를 느끼고 있는 제 모습을 발견할 수 있었습니다. 로직을 짜고, 머리를 맞대고 같이 에러를 해결하기도 하고, 서로의 코드를 리뷰하는 그런 과정 속에서 때로는 지치도 하고 때로는 벅차오르는 순간도 있었습니다. 이런 순간 순간들이 모여서 리액트, 깃 뿐만 아니라 협업에 대한 자신감을 얻을 수 있었고, 개발에 재미도 느끼며 조금은 성장하는 계기가 되었던 것 같습니다. 무사히 프로젝트를 마무리하게 되어 뿌듯하고, 각자의 자리에서 최선을 다해준 팀원들에게 감사하다고 전하고 싶습니다! 💗
   <br /><br />
 
-# 11. <sapn id="refactoring">진행한 Refactoring 내용</span>
+# 11. <span id="refactoring">진행한 Refactoring 내용</span>
 
-## ✏️ Fetch 코드 -> Axios 코드 변경 [관련 PR 바로가기](https://github.com/Yang-zzz/nonamarket_Refact/pull/1)
+## <span id="refactoring_1"> ✏️ Fetch 코드 -> Axios 코드 변경 | [관련 PR 바로가기](https://github.com/Yang-zzz/nonamarket_Refact/pull/1)</span>
 
 |                                                        수정 전 : Fetch 코드                                                         |                                                        수정 후 : Axios 코드                                                        |
 | :--------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------: |
@@ -358,7 +358,7 @@
 - 서버 전송 전 Interceptor를 활용해 Authorization 속성에 token을 추가함으로써, 각 페이지에서 token을 인자로 보내는 수고를 덜어낼 수 있게 되었음.
 - 전반적으로 Axios 통신 코드로 변경 후 통신 코드량이 감소하여 가독성이 향상 되었음.
 
-## ✏️ Redux & ReduxTolkit 상태관리 라이브러리 적용 <br />
+## <span id="refactoring_2">✏️ Redux & ReduxTolkit 상태관리 라이브러리 적용<span> <br />
 
 [Redux PR 바로가기](https://github.com/Yang-zzz/nonamarket_Refact/pull/2) | [RTK PR 바로가기](https://github.com/Yang-zzz/nonamarket_Refact/pull/5)
 
@@ -391,7 +391,7 @@
 | :--------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------: |
 | <img width="569" alt="image" src="https://github.com/TEAM-HI25/nonamarket/assets/89332492/531b53f9-239c-4968-bea6-8198deaeb550"> | <img width="600" alt="image" src="https://github.com/TEAM-HI25/nonamarket/assets/89332492/3f84dbab-3fca-4265-9ad8-fc0db4031c96"> |
 
-## ✏️ Search User Page Debouncing 적용 | [관련 PR 바로가기](https://github.com/Yang-zzz/nonamarket_Refact/pull/5)<br />
+## <span id="refactoring_3">✏️ Search User Page Debouncing 적용 | [관련 PR 바로가기](https://github.com/Yang-zzz/nonamarket_Refact/pull/5)<span><br />
   🧐 적용사유
   - Search User Page에서 유저 검색 시 불필요한 서버통신이 발생하였음. 이를 해결하고자 Debouncing 기법 적용
 
