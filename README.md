@@ -4,7 +4,7 @@
 
 <br/>
 
-- 🔗[배포URL](https://nonamarket.vercel.app/login)
+- 🔗[배포URL](https://nona-refact.vercel.app/)
 - 🔒서비스 이용을 위한 계정  
   id : nonamukza@nona.com <br/>
   pw : 123456
