@@ -9,7 +9,6 @@ import * as S from './StyledFollowerList';
 const FollowingList = () => {
   const { accountName } = useParams();
   const [followingList, setFollowingList] = useState([]);
-  console.log(followingList);
 
   useEffect(() => {
     if (!followingList.length) {

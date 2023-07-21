@@ -63,7 +63,6 @@ const ProductForm = ({ editing }) => {
   const handleGetImg = async (event) => {
     const data = await imageAPI.uploadImg(event);
     setProductImg(data);
-    console.log(productImg);
     setIsValid({ ...isValid, productImg: true });
   };
 
@@ -126,7 +125,6 @@ const ProductForm = ({ editing }) => {
         itemImage: `${productImg}`,
       },
     };
-    console.log(Data);
     if (editing) {
       const UpdatedData = await productAPI.reviseProductInfo(productid, Data);
       navigate(`/profile/${LoginData.accountname}`);

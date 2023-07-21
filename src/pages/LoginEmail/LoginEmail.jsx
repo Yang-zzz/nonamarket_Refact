@@ -45,7 +45,6 @@ const LoginEmail = () => {
       };
 
       dispatch(LoginAccess(loginData));
-      console.log(loginData);
       navigate('/homefeed');
     }
   };

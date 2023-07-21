@@ -1,5 +1,4 @@
 const PostAlbum = ({ data }) => {
-  console.log(data);
   const { image } = data;
   return (
     <li>
