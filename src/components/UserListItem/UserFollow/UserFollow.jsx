@@ -1,48 +1,34 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import Button from '../../common/Button/Button';
 import * as S from './StyledUserFollow';
-import { AuthContext } from '../../../context/context';
+import followAPI from '../../../api/followAPI';
 
 const UserFollow = ({ data }) => {
   const [isFollow, setIsFollow] = useState(data.isfollow);
-  const { user } = useContext(AuthContext);
-  const BASE_URL = 'https://mandarin.api.weniv.co.kr';
 
   const handelIsFollow = () => {
     if (isFollow === false) {
       const followingPost = async () => {
-        const url = `${BASE_URL}/profile/${data.accountname}/follow`;
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            'Content-type': 'application/json',
-          },
-        });
-        const followData = await response.json();
-        setIsFollow(followData.profile.isfollow);
+        const isFollowData = await followAPI.followingPost(data.accountname);
+        setIsFollow(isFollowData.profile.isfollow);
       };
       followingPost();
     } else if (isFollow === true) {
-      const unfollowingPost = async () => {
-        const url = `${BASE_URL}/profile/${data.accountname}/unfollow`;
-        const response = await fetch(url, {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            'Content-type': 'application/json',
-          },
-        });
-        const followData = await response.json();
-        setIsFollow(followData.profile.isfollow);
+      const unFollowingPost = async () => {
+        const unFollowData = await followAPI.unfollowingPost(data.accountname);
+        setIsFollow(unFollowData.profile.isfollow);
       };
-      unfollowingPost();
+      unFollowingPost();
     }
   };
+  let imageData = data.image;
+  if (imageData.includes('mandarin.api')) {
+    imageData = imageData.replace('mandarin.api', 'api.mandarin');
+  }
   return (
     <S.UserFollowContainer>
       <div>
-        <img src={data.image} alt='프로필이미지' />
+        <img src={imageData} alt='프로필이미지' />
       </div>
       <div>
         <strong>{data.username}</strong>

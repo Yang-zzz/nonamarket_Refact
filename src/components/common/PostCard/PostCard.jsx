@@ -1,6 +1,6 @@
-import { useContext } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../../context/context';
+import ProfileImg from '../../../assets/images/profile-image-mini.svg';
 import MessageCircleIcon from '../../../assets/images/icon-message-circle-mini.svg';
 import verticalMenuIcon from '../../../assets/images/icon-more-vertical.svg';
 import LikeButton from '../Button/LikeButton';
@@ -30,8 +30,7 @@ const PostCard = ({ data }) => {
     handleShowInnerModal,
     handleCloseInnerModal,
   ] = useModal();
-
-  const { user } = useContext(AuthContext);
+  const LoginData = useSelector((state) => state.Login.user);
   const navigate = useNavigate();
 
   const handleGoPostEdit = () => {
@@ -45,14 +44,25 @@ const PostCard = ({ data }) => {
   const handleGoDetailPage = () => {
     navigate(`/postdetail/${id}`);
   };
+  // API 서버 변경으로 인한 임시 image 데이터 처리
+  let profileImg = author.image;
+  let postImg = image;
+  if (profileImg.includes('mandarin.api') && postImg) {
+    profileImg = author.image.replace('mandarin.api', 'api.mandarin');
+    postImg = image.replace('mandarin.api', 'api.mandarin');
+  }
+  const handleImgError = (e) => {
+    e.target.src = ProfileImg;
+  };
 
   return (
     <>
       <S.ContentsWrapper>
         <S.ProfileImage
-          src={author.image}
+          src={profileImg}
           alt='프로필 이미지'
           onClick={handleGoUserPage}
+          onError={handleImgError}
         />
 
         <S.UserInfo>
@@ -66,9 +76,9 @@ const PostCard = ({ data }) => {
         </S.UserInfo>
         <S.PostContents onClick={handleGoDetailPage}>
           <p>{content}</p>
-          <S.PostImgLink>
-            {image &&
-              image
+          <S.PostImgLink onError={handleImgError}>
+            {postImg &&
+              postImg
                 .split(',')
                 .map((item) => (
                   <img key={item} src={item} alt='컨텐츠 관련 이미지' />
@@ -92,7 +102,7 @@ const PostCard = ({ data }) => {
       </S.ContentsWrapper>
 
       {/* eslint-disable-next-line no-nested-ternary */}
-      {!isShowModal ? null : author.accountname === user.accountname ? (
+      {!isShowModal ? null : author.accountname === LoginData.accountname ? (
         <Modal CloseModal={handleCloseModal}>
           <ModalBtn name='삭제' onClick={handleShowInnerModal} />
           <ModalBtn name='수정' onClick={handleGoPostEdit} />
@@ -103,7 +113,8 @@ const PostCard = ({ data }) => {
         </Modal>
       )}
       {/* eslint-disable-next-line no-nested-ternary */}
-      {!isShowInnerModal ? null : author.accountname === user.accountname ? (
+      {!isShowInnerModal ? null : author.accountname ===
+        LoginData.accountname ? (
         <InnerModal
           name='게시글삭제'
           CloseInnerModal={handleCloseInnerModal}

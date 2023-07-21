@@ -1,13 +1,11 @@
-import { useContext, useState, useEffect, useRef } from 'react';
-import { AuthContext } from '../../context/context';
-import FetchApi from '../../api';
+import { useState, useEffect, useRef } from 'react';
 import Nav from '../../components/Nav/Nav';
 import TabMenu from '../../components/common/TabMenu/TabMenu';
 import UserListItem from '../../components/UserListItem/UserListItem';
+import searchAPI from '../../api/searchAPI';
 import * as S from './StyledSearchUser';
 
 const SearchUser = () => {
-  const { user } = useContext(AuthContext);
   const [keyword, setKeyword] = useState('');
   const [userData, setUserData] = useState([]);
   const [pieceUserData, setPieceUserData] = useState([]);
@@ -34,17 +32,28 @@ const SearchUser = () => {
     threshold: 0.5,
   };
 
-  // 유저 데이터 받아오기
-  useEffect(() => {
+  // 키워드가 있을때 api통신을 보내는 함수
+  const onSearch = () => {
     if (keyword) {
       const getUserData = async () => {
-        const data = await FetchApi.searchUser(keyword, user.token);
+        const data = await searchAPI.searchUser(keyword);
         setIndex(15);
         setPieceUserData([]);
         setUserData(data);
       };
       getUserData();
     }
+  };
+
+  // 디바운스, 유저 데이터 받아오기
+  useEffect(() => {
+    const debounce = setTimeout(() => {
+      onSearch();
+    }, 400);
+
+    return () => {
+      clearTimeout(debounce);
+    };
   }, [keyword]);
 
   // 무한스크롤을 위한 옵저버 생성

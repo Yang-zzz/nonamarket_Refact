@@ -1,6 +1,5 @@
-import { useContext } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../../context/context';
 import useModal from '../../../hooks/useModal';
 import Modal from '../Modals/Modal';
 import ModalBtn from '../Modals/ModalBtn';
@@ -9,7 +8,7 @@ import * as S from './StyledProduct';
 
 const Product = ({ product }) => {
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const LoginData = useSelector((state) => state.Login.user);
   const replacePrice = product.price
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -23,20 +22,25 @@ const Product = ({ product }) => {
     handleShowInnerModal,
     handleCloseInnerModal,
   ] = useModal();
+  // API 서버 변경으로 인한 임시 image 데이터 처리
+  let itemImg = product.itemImage;
+  if (itemImg.includes('mandarin.api')) {
+    itemImg = itemImg.replace('mandarin.api', 'api.mandarin');
+  }
 
   return (
     <div>
       <S.ProductBtn
         type='button'
         onClick={() => {
-          if (product.author.accountname === user.accountname) {
+          if (product.author.accountname === LoginData.accountname) {
             handleShowModal();
           } else {
             window.open(product.link);
           }
         }}
       >
-        <S.ProductImg src={product.itemImage} alt='업로드된상품이미지' />
+        <S.ProductImg src={itemImg} alt='업로드된상품이미지' />
         <S.ProductName>{product.itemName}</S.ProductName>
         {replacePrice === '1' ? (
           <S.ProductPrice>무료 나눔</S.ProductPrice>

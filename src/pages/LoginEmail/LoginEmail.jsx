@@ -1,20 +1,19 @@
-import { useState, useContext } from 'react';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LoginAccess } from '../../redux/module/LoginData';
 import LabelInput from '../../components/common/LabelInput/LabelInput';
-import FetchApi from '../../api';
-import { AuthContext } from '../../context/context';
+import userAPI from '../../api/userAPI';
+import regex from '../../utils/regex';
 import * as S from './StyledLoginEmail';
 
 const LoginEmail = () => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { dispatch } = useContext(AuthContext);
   const [isValid, setIsValid] = useState(false); // 유효성검사 state
   const [message, setMessage] = useState(''); // 에러메세지 state
-  const navigate = useNavigate(); // e
-
-  const EMAIL_CHECK =
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,6}$/i;
+  const navigate = useNavigate();
 
   const handleData = (event) => {
     if (event.target.type === 'email') {
@@ -23,22 +22,20 @@ const LoginEmail = () => {
       setPassword(event.target.value);
     }
   };
+
   // 정규표현식 일치 여부에 따라 버튼색이 바뀌는 함수
   const handleCheckValid = () => {
-    return EMAIL_CHECK.test(email) && password.length > 5
+    return regex.EMAIL_CHECK.test(email) && password.length > 5
       ? setIsValid(true)
       : setIsValid(false);
   };
 
-  // 로컬스토리지에 토큰 저장
   const handleSubmit = async (event) => {
-    event.preventDefault(); // 새로고침 방지
-    const data = await FetchApi.getLogin(email, password);
+    event.preventDefault();
+    const data = await userAPI.getLogin(email, password);
     if (data.message === '이메일 또는 비밀번호가 일치하지 않습니다.') {
       setMessage('이메일 또는 비밀번호가 일치하지 않습니다.');
     } else {
-      // console.log(data);
-      // const token = data.user.token;
       localStorage.setItem('token', data.user.token);
       localStorage.setItem('accountname', data.user.accountname);
 
@@ -47,7 +44,8 @@ const LoginEmail = () => {
         accountname: data.user.accountname,
       };
 
-      dispatch({ type: 'login', payload: loginData });
+      dispatch(LoginAccess(loginData));
+      console.log(loginData);
       navigate('/homefeed');
     }
   };
@@ -75,8 +73,6 @@ const LoginEmail = () => {
           />
           <div>{message}</div>
           <S.LoginBtn name='로그인' disabled={!isValid} />
-          {/* disabled 가 true 일때 버튼이 비활성화 , false 일때 활성화  defalut는 false */}
-          {/* 유효성 검사에서 true를 반환, disalbed에서 (!유효성검사결과) 활성화 === false */}
         </form>
         <S.LoginLink to='/joinemail'>이메일로 회원가입</S.LoginLink>
       </S.MainWrapper>

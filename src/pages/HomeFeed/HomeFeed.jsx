@@ -1,24 +1,22 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/context';
 import Loading from '../../components/Loading/Loading';
 import Button from '../../components/common/Button/Button';
 import PostCard from '../../components/common/PostCard/PostCard';
 import symbolLogoMini from '../../assets/images/symbol-logo-mini.svg';
 import TabMenu from '../../components/common/TabMenu/TabMenu';
 import Nav from '../../components/Nav/Nav';
-import FetchApi from '../../api';
+import postAPI from '../../api/postAPI';
 import * as S from './StyledHomeFeed';
 
 const HomeFeed = () => {
   const [feed, setFeed] = useState([]);
   const [isloading, setIsLoading] = useState(true);
-  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     const setHomeFeed = async () => {
-      const data = await FetchApi.loadFeed(user.token);
+      const data = await postAPI.loadFeed();
       setFeed(data.posts);
       setIsLoading(false);
     };

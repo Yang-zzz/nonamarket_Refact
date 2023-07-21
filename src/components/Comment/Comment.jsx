@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { AuthContext } from '../../context/context';
+import { useSelector } from 'react-redux';
 import verticalIcon from '../../assets/images/icon-more-vertical.svg';
 import useModal from '../../hooks/useModal';
 import Modal from '../common/Modals/Modal';
@@ -9,7 +8,7 @@ import ProfileImg from '../common/ProfileImg/ProfileImg';
 import * as S from './StyledComment';
 
 const Comment = ({ comment, postid }) => {
-  const { user } = useContext(AuthContext);
+  const LoginData = useSelector((state) => state.Login.user);
   const [
     isShowModal,
     isShowInnerModal,
@@ -38,19 +37,25 @@ const Comment = ({ comment, postid }) => {
     }
     return `${Math.floor(gap / 2592000)}달 전`;
   };
+  // API 서버 변경으로 인한 임시 image 데이터 처리
+  let profileImg = comment.author.image;
+  if (profileImg.includes('mandarin.api')) {
+    profileImg = comment.author.image.replace('mandarin.api', 'api.mandarin');
+  }
+  const handleImgError = (e) => {
+    e.target.src = ProfileImg;
+  };
 
   return (
-    // {commentsData &&
-    //   commentsData.map((comment) => {
-    //     return (
     <S.CommentListWrapper>
-      <S.CommentListContainer>
+      <ul>
         <li key={comment.id}>
           <S.CommentUserInfo>
             <ProfileImg
               size='36px'
-              src={comment.author.image}
+              src={profileImg}
               alt='프로필이미지'
+              onError={handleImgError}
             />
             <S.UserInfo>
               <strong>{comment.author.username}</strong>
@@ -62,9 +67,10 @@ const Comment = ({ comment, postid }) => {
           </S.CommentUserInfo>
           <S.CommentContent>{comment.content}</S.CommentContent>
         </li>
-      </S.CommentListContainer>
+      </ul>
       {/* eslint-disable-next-line no-nested-ternary */}
-      {!isShowModal ? null : comment.author.accountname === user.accountname ? (
+      {!isShowModal ? null : comment.author.accountname ===
+        LoginData.accountname ? (
         <Modal CloseModal={handleCloseModal}>
           <ModalBtn name='삭제' onClick={handleShowInnerModal} />
         </Modal>
@@ -76,7 +82,7 @@ const Comment = ({ comment, postid }) => {
 
       {/* eslint-disable-next-line no-nested-ternary */}
       {!isShowInnerModal ? null : comment.author.accountname ===
-        user.accountname ? (
+        LoginData.accountname ? (
         <InnerModal
           name='댓글삭제'
           CloseInnerModal={handleCloseInnerModal}
@@ -91,16 +97,6 @@ const Comment = ({ comment, postid }) => {
           comment={comment}
         />
       )}
-
-      {/* {isOpenModal && (
-                <CommentModal
-                  onClick={handleCloseModal}
-                  setIsOpenModal={setIsOpenModal}
-                  comment={comment}
-                  postid={postid}
-                  handleDelete={handleDelete}
-                />
-              )} */}
     </S.CommentListWrapper>
   );
 };

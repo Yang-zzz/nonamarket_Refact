@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useContext } from 'react';
-import { AuthContext } from '../context/context';
+import { useSelector } from 'react-redux';
 import Login from '../pages/Login/Login';
 import Splash from '../pages/Splash/Splash';
 import LoginEmail from '../pages/LoginEmail/LoginEmail';
@@ -12,7 +11,7 @@ import FollowerList from '../pages/Follow/FollowerList';
 import FollowingList from '../pages/Follow/FollowingList';
 import ModifyProfile from '../pages/ModifyProfile/ModifyProfile';
 import AddProduct from '../pages/AddProduct/AddProduct';
-import UpdateProduct from '../pages/UpdateProduct/UpdateProduct';
+import EditProduct from '../pages/EditProduct/EditProduct';
 import PostDetail from '../pages/PostDetail/PostDetail';
 import UploadPost from '../pages/UploadPost/UploadPost';
 import ChatList from '../pages/ChatList/ChatList';
@@ -21,12 +20,12 @@ import NotFound from '../pages/NotFound/NotFound';
 import EditPost from '../pages/EditPost/EditPost';
 
 const Router = () => {
-  const { user } = useContext(AuthContext);
+  const LoginData = useSelector((state) => state.Login.user);
 
   return (
     <BrowserRouter>
       <Routes>
-        {user.token && user.accountname ? (
+        {LoginData.token && LoginData.accountname ? (
           <Route>
             <Route path='/' element={<Splash />} />
             <Route path='/login' element={<Login />} />
@@ -45,12 +44,12 @@ const Router = () => {
             />
             <Route path='/modifyprofile' element={<ModifyProfile />} />
             <Route path='/addproduct' element={<AddProduct />} />
-            <Route path='/product/:productid' element={<UpdateProduct />} />
+            <Route path='/product/:productid' element={<EditProduct />} />
             <Route path='/postdetail/:postid' element={<PostDetail />} />
             <Route path='/editpost/:postid' element={<EditPost />} />
             <Route path='/uploadpost' element={<UploadPost />} />
             <Route path='/chatlist' element={<ChatList />} />
-            <Route path='/chatroom' element={<ChatRoom />} />
+            <Route path='/chatroom/:chatid' element={<ChatRoom />} />
             <Route path='/*' element={<NotFound />} />
           </Route>
         ) : (
